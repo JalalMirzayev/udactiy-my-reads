@@ -3,7 +3,7 @@ import Book from "./Book.js";
 import { BookType } from "./BookType.js";
 
 const BookSection = (props) => {
-	const { shelf, books, updateShelfValue, selectedShelf } = props;
+	const { shelf, books, updateShelfValue } = props;
 	const relevantBooks = books.filter((book) => book.shelf === shelf);
 
 	return (
@@ -18,8 +18,8 @@ const BookSection = (props) => {
 								title={book.title}
 								authors={book.authors}
 								imageUrl={book.imageUrl}
-								selectedShelf={selectedShelf}
-								updateShelf={updateShelfValue}
+								selectedShelf={book.shelf}
+								updateShelfValue={updateShelfValue}
 							/>
 						</li>
 					))}

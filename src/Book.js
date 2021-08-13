@@ -1,7 +1,15 @@
 import React from "react";
 
 const Book = (props) => {
-	const { id, title, authors, imageUrl, updateShelf, selectedShelf } = props;
+	const {
+		id,
+		title,
+		authors,
+		imageUrl,
+		updateShelfValue,
+		selectedShelf,
+	} = props;
+
 	return (
 		<div className='book'>
 			<div className='book-top'>
@@ -15,9 +23,8 @@ const Book = (props) => {
 				/>
 				<div className='book-shelf-changer'>
 					<select
-						defaultValue='move'
 						value={selectedShelf}
-						onChange={(event) => updateShelf(id, event.target.value)}
+						onChange={(event) => updateShelfValue(id, event.target.value)}
 					>
 						<option value='move' disabled>
 							Move to...

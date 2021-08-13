@@ -2,20 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { search } from "./BooksAPI.js";
 import Book from "./Book.js";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 const SearchPage = (props) => {
 	const {
 		searchQuery,
+		books,
 		handleSearchQuery,
-		selectedShelf,
 		updateShelfValue,
+		booksSearch,
+		updateBooksSearch,
 	} = props;
-
-	const [searchedBooks, setSearchedBooks] = useState([]);
 
 	useEffect(
 		() => {
+			updateBooksSearch([]);
 			if (searchQuery.trim() !== "") {
 				search(searchQuery)
 					.then((data) =>
@@ -24,17 +25,28 @@ const SearchPage = (props) => {
 								id: book.id,
 								shelf: "none",
 								title: book.title,
-								authors: book.authors.join(", "),
+								authors:
+									typeof book.authors === "undefined"
+										? ""
+										: book.authors.join(", "),
 								imageUrl: book.imageLinks.thumbnail,
 							};
 						})
 					)
-					.then((books) => setSearchedBooks(books))
-					.catch((error) => console.log(error));
+					.then((books) => updateBooksSearch(books))
+					.catch((error) => {
+						updateBooksSearch([]);
+						console.log(error);
+					});
 			}
 		},
 		[searchQuery]
 	);
+
+	const getShelfValue = (id) => {
+		const foundBook = books.find((book) => book.id === id);
+		return typeof foundBook !== "undefined" ? foundBook.shelf : "none";
+	};
 
 	return (
 		<div className='search-books'>
@@ -59,15 +71,15 @@ const SearchPage = (props) => {
 			</div>
 			<div className='search-books-results'>
 				<ol className='books-grid'>
-					{searchedBooks.map((book) => (
+					{booksSearch.map((book) => (
 						<li key={book.id}>
 							<Book
 								id={book.id}
 								title={book.title}
 								authors={book.authors}
 								imageUrl={book.imageUrl}
-								selectedShelf={selectedShelf}
-								updateShelf={updateShelfValue}
+								selectedShelf={getShelfValue(book.id)}
+								updateShelfValue={updateShelfValue}
 							/>
 						</li>
 					))}

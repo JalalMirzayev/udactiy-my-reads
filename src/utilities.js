@@ -4,7 +4,8 @@ export const getBooks = (result) => {
 			id: book.id,
 			shelf: book.shelf,
 			title: book.title,
-			authors: book.authors.join(", "),
+			authors:
+				typeof book.authors === "undefined" ? "" : book.authors.join(", "),
 			imageUrl: book.imageLinks.thumbnail,
 		};
 	});

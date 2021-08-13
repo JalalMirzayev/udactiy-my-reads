@@ -3,7 +3,7 @@ import BookSection from "./BookSection.js";
 import { Link } from "react-router-dom";
 
 const ListBooksPage = (props) => {
-	const { books, updateShelf, updateShelfValue } = props;
+	const { books, updateShelfValue } = props;
 
 	return (
 		<div className='list-books'>
@@ -15,19 +15,16 @@ const ListBooksPage = (props) => {
 					<BookSection
 						shelf='currentlyReading'
 						books={books}
-						updateShelf={updateShelf}
 						updateShelfValue={updateShelfValue}
 					/>
 					<BookSection
 						shelf='wantToRead'
 						books={books}
-						updateShelf={updateShelf}
 						updateShelfValue={updateShelfValue}
 					/>
 					<BookSection
 						shelf='read'
 						books={books}
-						updateShelf={updateShelf}
 						updateShelfValue={updateShelfValue}
 					/>
 				</div>

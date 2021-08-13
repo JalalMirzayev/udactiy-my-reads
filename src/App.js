@@ -12,6 +12,7 @@ class BooksApp extends React.Component {
 		searchQuery: "",
 		books: [],
 		selectedShelf: "",
+		booksSearch: [],
 	};
 
 	handleSearchQuery = (value) => {
@@ -19,22 +20,47 @@ class BooksApp extends React.Component {
 	};
 
 	updateShelfValue = (id, value) => {
-		const newBooks = this.state.books.map((book) =>
-			book.id !== id
-				? book
-				: {
-						...book,
-						shelf: value,
-				  }
-		);
-		this.setState({ ...this.state, books: newBooks }, () =>
-			update({ id: id }, value)
-		);
+		const foundBook = this.state.books.find((book) => book.id === id);
+		if (typeof foundBook !== "undefined") {
+			this.setState(
+				{
+					...this.state,
+					selectedShelf: value,
+					books: this.state.books.map((book) =>
+						book.id !== id
+							? book
+							: {
+									...book,
+									shelf: value,
+							  }
+					),
+				},
+				() => {
+					update({ id: id }, value);
+				}
+			);
+		} else if (typeof foundBook === "undefined") {
+			const newBooksSearch = this.state.booksSearch.map((book) =>
+				book.id !== id ? book : { ...book, shelf: value }
+			);
+			this.setState({ ...this.state, booksSearch: newBooksSearch });
+			let newBook = this.state.booksSearch.find((book) => book.id === id);
+			newBook = { ...newBook, shelf: value };
+			this.setState(
+				{ ...this.state, books: [...this.state.books, newBook] },
+				() => {
+					update({ id: id }, value);
+				}
+			);
+		}
+	};
+
+	updateBooksSearch = (newBooks) => {
+		this.setState({ ...this.state, booksSearch: newBooks });
 	};
 
 	componentDidMount() {
-		const promise = getAll();
-		promise
+		getAll()
 			.then((result) => getBooks(result))
 			.then((result) => this.setState({ ...this.state, books: result }))
 			.catch((error) => console.log(error));
@@ -54,10 +80,12 @@ class BooksApp extends React.Component {
 						</Route>
 						<Route path='/search'>
 							<SearchPage
-								handleSearchQuery={this.handleSearchQuery}
 								searchQuery={this.state.searchQuery}
-								selectedShelf={this.state.selectedShelf}
+								books={this.state.books}
+								handleSearchQuery={this.handleSearchQuery}
 								updateShelfValue={this.updateShelfValue}
+								booksSearch={this.state.booksSearch}
+								updateBooksSearch={this.updateBooksSearch}
 							/>
 						</Route>
 					</Switch>

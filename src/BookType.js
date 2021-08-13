@@ -3,4 +3,5 @@ export const BookType = {
 	wantToRead: "Want to Read",
 	read: "Read",
 	unknown: "Unknow",
+	searchResults: "Search Results",
 };
