@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { search } from "./BooksAPI.js";
 import Book from "./Book.js";
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 
 const SearchPage = (props) => {
 	const {
@@ -29,7 +30,10 @@ const SearchPage = (props) => {
 									typeof book.authors === "undefined"
 										? ""
 										: book.authors.join(", "),
-								imageUrl: book.imageLinks.thumbnail,
+								imageUrl:
+									typeof book.imageLinks === "undefined"
+										? ""
+										: book.imageLinks.thumbnail,
 							};
 						})
 					)
@@ -90,3 +94,12 @@ const SearchPage = (props) => {
 };
 
 export default SearchPage;
+
+SearchPage.propTypes = {
+	searchQuery: PropTypes.string.isRequired,
+	books: PropTypes.array.isRequired,
+	handleSearchQuery: PropTypes.func.isRequired,
+	updateShelfValue: PropTypes.func.isRequired,
+	booksSearch: PropTypes.array.isRequired,
+	updateBooksSearch: PropTypes.func.isRequired,
+};

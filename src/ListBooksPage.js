@@ -1,6 +1,7 @@
 import React from "react";
 import BookSection from "./BookSection.js";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const ListBooksPage = (props) => {
 	const { books, updateShelfValue } = props;
@@ -39,3 +40,8 @@ const ListBooksPage = (props) => {
 };
 
 export default ListBooksPage;
+
+ListBooksPage.propTypes = {
+	books: PropTypes.array.isRequired,
+	updateShelfValue: PropTypes.func.isRequired,
+};
